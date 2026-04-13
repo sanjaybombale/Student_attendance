@@ -1,0 +1,159 @@
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(120) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(15),
+    role VARCHAR(20) DEFAULT 'student',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE admins (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER UNIQUE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER UNIQUE,
+    roll_no VARCHAR(50) UNIQUE NOT NULL,
+    course_id INTEGER,
+    dob DATE,
+    gender VARCHAR(10),
+    address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE courses (
+    id SERIAL PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL,
+    course_code VARCHAR(20) UNIQUE,
+    duration VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE subjects (
+    id SERIAL PRIMARY KEY,
+    subject_name VARCHAR(100) NOT NULL,
+    course_id INTEGER,
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+);
+
+CREATE TABLE enrollments (
+    id SERIAL PRIMARY KEY,
+    student_id INTEGER,
+    course_id INTEGER,
+    enrollment_date DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+);
+
+CREATE TABLE marks (
+    id SERIAL PRIMARY KEY,
+    student_id INTEGER,
+    subject_id INTEGER,
+    marks INTEGER CHECK (marks >= 0 AND marks <= 100),
+    exam_type VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+);
+
+CREATE TABLE attendance (
+    id SERIAL PRIMARY KEY,
+    student_id INTEGER,
+    date DATE NOT NULL,
+    status VARCHAR(10) CHECK (status IN ('Present','Absent')),
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+);
+
+CREATE TABLE payments (
+    id SERIAL PRIMARY KEY,
+    student_id INTEGER,
+    amount NUMERIC(10,2),
+    payment_method VARCHAR(50),
+    status VARCHAR(20) DEFAULT 'Pending',
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+);
+
+CREATE TABLE notifications (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(150),
+    message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE student_notifications (
+    id SERIAL PRIMARY KEY,
+    student_id INTEGER,
+    notification_id INTEGER,
+    is_read BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (notification_id) REFERENCES notifications(id) ON DELETE CASCADE
+);
+
+CREATE TABLE profile_images (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER,
+    image_path TEXT,
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+
+
+INSERT INTO users (full_name, email, password, phone, role) VALUES
+('Admin User', 'admin@gmail.com', 'admin123', '9999999999', 'admin'),
+('Rahul Sharma', 'rahul@gmail.com', 'rahul123', '8888888888', 'student'),
+('Priya Verma', 'priya@gmail.com', 'priya123', '7777777777', 'student');
+
+INSERT INTO admins (user_id) VALUES
+(1);
+
+INSERT INTO courses (course_name, course_code, duration) VALUES
+('BSc Computer Science', 'BSC-CS', '3 Years'),
+('BCA', 'BCA', '3 Years');
+
+INSERT INTO students (user_id, roll_no, course_id, dob, gender, address) VALUES
+(2, 'CS101', 1, '2003-05-10', 'Male', 'Pune'),
+(3, 'CS102', 1, '2004-02-15', 'Female', 'Mumbai');
+
+INSERT INTO subjects (subject_name, course_id) VALUES
+('Database Management', 1),
+('Operating System', 1),
+('Programming in C', 2);
+
+INSERT INTO enrollments (student_id, course_id) VALUES
+(1,1),
+(2,1);
+
+INSERT INTO marks (student_id, subject_id, marks, exam_type) VALUES
+(1,1,85,'Midterm'),
+(1,2,78,'Final'),
+(2,1,90,'Midterm');
+
+INSERT INTO attendance (student_id, date, status) VALUES
+(1,'2026-04-01','Present'),
+(1,'2026-04-02','Absent'),
+(2,'2026-04-01','Present');
+
+INSERT INTO payments (student_id, amount, payment_method, status) VALUES
+(1,50000,'UPI','Completed'),
+(2,50000,'Card','Pending');
+
+INSERT INTO notifications (title, message) VALUES
+('Exam Notice','Midterm exams start next week'),
+('Holiday','College closed on Monday');
+
+INSERT INTO student_notifications (student_id, notification_id, is_read) VALUES
+(1,1,false),
+(2,2,false);
+
+INSERT INTO profile_images (user_id, image_path) VALUES
+(1,'uploads/admin.png'),
+(2,'uploads/rahul.png'),
+(3,'uploads/priya.png');
