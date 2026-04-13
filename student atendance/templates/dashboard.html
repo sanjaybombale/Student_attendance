@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+<style>
+body {margin:0; font-family:Arial; display:flex;}
+.sidebar {
+    width:220px; height:100vh; background:#1e1e2f;
+    color:white; padding:20px;
+}
+.sidebar a {
+    display:block; color:white; padding:10px;
+    text-decoration:none;
+}
+.sidebar a:hover {background:#4facfe;}
+.main {flex:1; padding:20px;}
+.cards {display:flex; gap:20px;}
+.card {
+    flex:1; background:#4facfe; padding:30px;
+    color:white; border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+<h2>SIMS</h2>
+<a href="/dashboard">Dashboard</a>
+<a href="/add">Add Student</a>
+<a href="/students">Students</a>
+<a href="/admin">Admin</a>
+<a href="/logout">Logout</a>
+</div>
+
+<div class="main">
+<h1>Dashboard</h1>
+
+<div class="cards">
+<div class="card">Students</div>
+<div class="card">Courses</div>
+<div class="card">Reports</div>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin</title>
+<style>
+body {font-family:Arial;}
+.card {
+    width:200px; padding:20px; background:#4facfe;
+    color:white; margin:20px; border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1 align="center">Admin Panel</h1>
+
+<div style="display:flex; justify-content:center;">
+<div class="card">Total Users: {{ total_users }}</div>
+<div class="card">Total Students: {{ total_students }}</div>
+<div class="card">Total Courses: {{ total_courses }}</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Students</title>
+<style>
+table {width:80%; margin:auto; border-collapse:collapse;}
+th,td {padding:10px; border:1px solid black;}
+</style>
+</head>
+
+<body>
+
+<h2 align="center">Students</h2>
+
+<table>
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Roll</th>
+<th>Action</th>
+</tr>
+
+{% for s in students %}
+<tr>
+<td>{{ s[1] }}</td>
+<td>{{ s[2] }}</td>
+<td>{{ s[3] }}</td>
+<td><a href="/delete/{{ s[0] }}">Delete</a></td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>
